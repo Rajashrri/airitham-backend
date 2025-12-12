@@ -86,36 +86,49 @@ const updateCategory = async (req, res) => {
     const id = req.params.id;
     const { name } = req.body;
 
-    // Step 1: Find the current role to get the old name
-    const existingRole = await BlogCategory.findById(id);
-    if (!existingRole) {
-      return res.status(404).json({ msg: "Role not found" });
+    // 🔹 Step 1: Find existing category by ID
+    const existingCategory = await BlogCategory.findById(id);
+    if (!existingCategory) {
+      return res.status(404).json({ msg: "Category not found" });
     }
 
-    const oldRoleName = existingRole.name;
+    // 🔹 Step 2: Check for duplicate category name (case-insensitive)
+    const duplicate = await BlogCategory.findOne({
+      name: { $regex: new RegExp(`^${name}$`, "i") }, // case insensitive
+      _id: { $ne: id }, // exclude current category
+    });
+
+    if (duplicate) {
+      return res.status(400).json({
+        success: false,
+        msg: "Category already exist",
+      });
+    }
+
+    // 🔹 Step 3: Generate clean URL
     const url = createCleanUrl(name);
 
-    // Step 2: Update Role document
+    // 🔹 Step 4: Update category
     const result = await BlogCategory.updateOne(
       { _id: id },
-      {
-        $set: {
-          name: name,
-          url: url,
-        },
-      }
+      { $set: { name, url } }
     );
 
-    // Step 3: Update Privilege documents where role name matches old name
-
-    res
-      .status(200)
-      .json({ msg: "Role and related privileges updated", result });
+    return res.status(200).json({
+      success: true,
+      msg: "Category updated successfully",
+      result,
+    });
   } catch (error) {
-    console.error("Error updating role:", error);
-    res.status(500).json({ error: error.message });
+    console.error("Error updating category:", error);
+    return res.status(500).json({
+      success: false,
+      msg: "Server error",
+      error: error.message,
+    });
   }
 };
+
 
 const updateStatusCategory = async (req, res) => {
   try {
