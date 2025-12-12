@@ -26,7 +26,7 @@ const errorMiddleware1 = require("./middlewares/error-middleware");
 
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'https://airitham-front.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   credentials: true,
 };
