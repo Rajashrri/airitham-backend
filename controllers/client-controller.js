@@ -1,5 +1,6 @@
 const Client = require("../models/client-model");
-
+const fs = require("fs");
+const path = require("path");
 // Utility: Create clean URL from title
 function createCleanUrl(title) {
   let cleanTitle = title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
@@ -60,34 +61,33 @@ const { name,createdBy } = req.body;
 const updateclient = async (req, res) => {
   try {
     const { name } = req.body;
-    const blogId = req.params.id;
+    const clientId = req.params.id;
 
-    const client = await Client.findById(blogId);
+    const client = await Client.findById(clientId);
     if (!client) {
-      return res.status(404).json({ msg: "Blog not found" });
+      return res.status(404).json({ msg: "Client not found" });
     }
 
-    // Update fields
-    client.name = name || client.name;
-    
+    // ✅ Update name
+    if (name) client.name = name;
 
-    // 📂 Image upload handling
-    if (req.files) {
-      // If main_image uploaded
-      if (req.files.image) {
-        // delete old image if exists
-        if (client.image) {
-          const oldMainPath = path.join(__dirname, "../public/client/", client.image);
-          if (fs.existsSync(oldMainPath)) fs.unlinkSync(oldMainPath);
-        }
-        client.image = req.files.image[0].filename;
+    // ✅ Handle file upload
+    const newImageFile =
+      (req.files && req.files.image && req.files.image[0]) || req.file;
+
+    if (newImageFile) {
+      // delete old image if exists
+      if (client.image) {
+        const oldPath = path.join(__dirname, "../public/client/", client.image);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
       }
 
-    
+      client.image = newImageFile.filename;
     }
 
     await client.save();
-    res.status(200).json({ msg: "Blog updated successfully", client });
+
+    res.status(200).json({ msg: "Client updated successfully", client });
   } catch (error) {
     console.error("Error updating client:", error);
     res.status(500).json({ msg: "Server error", error: error.message });
