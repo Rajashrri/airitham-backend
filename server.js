@@ -16,6 +16,7 @@ const profileRoute = require("./router/profile-router");
 const testimonialsRoute = require("./router/testimonials-router");
 const clientRoute = require("./router/client-router");
 const blogRoute = require("./router/blog-router");
+const dashboardRoute = require("./router/dashboard-router");
 
 
 // Middlewares
@@ -60,6 +61,7 @@ app.use("/api/profile", profileRoute);
 app.use("/api/testimonial", testimonialsRoute);
 app.use("/api/client", clientRoute);
 app.use("/api/blog",blogRoute);
+app.use("/api/dashboard",dashboardRoute);
 
 
 // otp
