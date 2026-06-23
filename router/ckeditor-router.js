@@ -21,7 +21,7 @@ router.post(
 
     res.json({
       uploaded: true,
-      url: `${process.env.BACKEND_URL}/uploads/ckeditor/${req.file.filename}`,
+      url: `${process.env.REACT_APP_API_BASE_URL}/uploads/ckeditor/${req.file.filename}`,
     });
   }
 );
