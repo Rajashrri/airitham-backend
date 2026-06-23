@@ -2,6 +2,12 @@ const { BlogCategory } = require("../models/blogcategory-model");
 const { Blog } = require("../models/blog-model");
 const path = require("path");  // ✅ add this line
 const fs = require("fs");      // ✅ add this too
+
+const {
+  uploadToCloudinary
+} = require("../utils/upload");
+
+const deleteFromCloudinary = require("../utils/cloudinaryDelete");
 function createCleanUrl(title) {
   // Convert the title to lowercase
   let cleanTitle = title.toLowerCase();
@@ -31,13 +37,22 @@ const { name, category_id, date, author_name, short_description, details, create
       return res.status(400).json({ msg: "Name and Category are required" });
     }
 
-    // Handle uploaded files
-    const mainImage = req.files["main_image"]
-      ? req.files["main_image"][0].filename
-      : "";
-    const featureImage = req.files["feature_image"]
-      ? req.files["feature_image"][0].filename
-      : "";
+ let mainImage = "";
+let featureImage = "";
+
+if (req.files?.main_image?.[0]) {
+  mainImage = await uploadToCloudinary(
+    req.files.main_image[0].path,
+    "blog/main"
+  );
+}
+
+if (req.files?.feature_image?.[0]) {
+  featureImage = await uploadToCloudinary(
+    req.files.feature_image[0].path,
+    "blog/featured"
+  );
+}
  const url = createCleanUrl(req.body.name);
  const now = new Date(); // ✅ Define now
     const createdAt = formatDateDMY(now); // 👈 formatted date
@@ -160,23 +175,29 @@ const updateblog = async (req, res) => {
     // 📂 Image upload handling
     if (req.files) {
       // If main_image uploaded
-      if (req.files.main_image) {
-        // delete old image if exists
-        if (blog.main_image) {
-          const oldMainPath = path.join(__dirname, "../public/blog/", blog.main_image);
-          if (fs.existsSync(oldMainPath)) fs.unlinkSync(oldMainPath);
-        }
-        blog.main_image = req.files.main_image[0].filename;
-      }
+     if (req.files?.main_image?.[0]) {
 
-      // If feature_image uploaded
-      if (req.files.feature_image) {
-        if (blog.feature_image) {
-          const oldFeaturePath = path.join(__dirname, "../public/blog/", blog.feature_image);
-          if (fs.existsSync(oldFeaturePath)) fs.unlinkSync(oldFeaturePath);
-        }
-        blog.feature_image = req.files.feature_image[0].filename;
-      }
+  if (blog.main_image) {
+    await deleteFromCloudinary(blog.main_image);
+  }
+
+  blog.main_image = await uploadToCloudinary(
+    req.files.main_image[0].path,
+    "blog/main"
+  );
+}
+
+   if (req.files?.feature_image?.[0]) {
+
+  if (blog.feature_image) {
+    await deleteFromCloudinary(blog.feature_image);
+  }
+
+  blog.feature_image = await uploadToCloudinary(
+    req.files.feature_image[0].path,
+    "blog/featured"
+  );
+}
     }
 
     await blog.save();
@@ -210,6 +231,14 @@ const getdatablog = async (req, res) => {
 const deleteblog = async (req, res) => {
   try {
     const id = req.params.id;
+
+    if (blog.main_image) {
+  await deleteFromCloudinary(blog.main_image);
+}
+
+if (blog.feature_image) {
+  await deleteFromCloudinary(blog.feature_image);
+}
     const response = await Blog.findOneAndDelete({ _id: id });
 
     if (!response) {
