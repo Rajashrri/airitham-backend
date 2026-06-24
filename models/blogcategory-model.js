@@ -1,26 +1,11 @@
 const { Schema, model } = require("mongoose");
 
-//category
-
-
 const blogcategorySchema = new Schema({
-    name: { type: String, required: true },
-   
-    url: { type: String },
-    status: { type: String },
-    createdBy :{ type: String},
-     createdAt: { type: String },
-
-
+  name: { type: String, required: true },
+  url: { type: String },
+  status: { type: String },
+  createdBy: { type: String },
+  createdAt: { type: String },
 });
 
-
-const BlogCategory = new model('blogcategory', blogcategorySchema);
-
-
-
-
-module.exports = { BlogCategory};
-
-
-
+module.exports = model("BlogCategory", blogcategorySchema);

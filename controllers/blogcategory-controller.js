@@ -1,4 +1,4 @@
-const { BlogCategory } = require("../models/blogcategory-model");
+const  BlogCategory  = require("../models/blogcategory-model");
 
 function createCleanUrl(title) {
   // Convert the title to lowercase

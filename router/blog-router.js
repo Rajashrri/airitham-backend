@@ -32,5 +32,6 @@ router.get("/getdatablog", Blog.getdatablog);
 router.patch("/update-statusblog", Blog.updateStatusblog);
 router.delete("/deleteblog/:id", Blog.deleteblog);
 router.get("/getblogByid/:id", Blog.getblogByid);
+router.patch("/update-featuredblog", Blog.updateFeaturedblog);
 
 module.exports = router;

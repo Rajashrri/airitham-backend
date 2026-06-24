@@ -19,6 +19,7 @@ const blogRoute = require("./router/blog-router");
 const dashboardRoute = require("./router/dashboard-router");
 
 const ckeditorRoutes = require("./router/ckeditor-router");
+const frontRoute = require("./router/front-router");
 
 // Middlewares
 const errorMiddleware = require("./middlewares/validate-middleware");
@@ -80,6 +81,9 @@ app.use("/api/blog",blogRoute);
 app.use("/api/dashboard",dashboardRoute);
 
 app.use("/api/ckeditor", ckeditorRoutes);
+
+app.use("/api/front", frontRoute);
+
 
 // otp
 app.use(errorMiddleware);

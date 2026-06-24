@@ -1,10 +1,17 @@
 const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
 //Fixed item master
 const blogSchema = new Schema(
   {
     name: { type: String, required: true },
-    category_id: { type: String, required: true },
+  
+    category_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "BlogCategory",
+      required: true,
+    },
+
     main_image: { type: String },       // file path
     feature_image: { type: String },    // file path
     createdBy :{ type: String},
@@ -14,6 +21,8 @@ const blogSchema = new Schema(
     details: { type: String, required: true },
     main_image: { type: String },
         status: { type: Number, default: 1 }, // ✅ active by default
+                featured: { type: Number, default: 0 }, // ✅ active by default
+
  createdAt: { type: String },
    url: { type: String },
   },

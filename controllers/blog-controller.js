@@ -1,4 +1,4 @@
-const { BlogCategory } = require("../models/blogcategory-model");
+const  BlogCategory  = require("../models/blogcategory-model");
 const { Blog } = require("../models/blog-model");
 const path = require("path");  // ✅ add this line
 const fs = require("fs");      // ✅ add this too
@@ -123,6 +123,29 @@ const getcategoryOptionsTable = async (req, res) => {
 
 
 
+
+const updateFeaturedblog = async (req, res) => {
+  try {
+    const { featured, id } = req.body;
+
+    const result = await Blog.updateOne(
+      { _id: id },
+      {
+        $set: {
+          featured: featured,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(201).json({
+      msg: "Updated Successfully",
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 //update status
 
 const updateStatusblog = async (req, res) => {
@@ -163,8 +186,11 @@ const updateblog = async (req, res) => {
     }
 
     // Update fields
-    blog.name = name || blog.name;
-    blog.category_id = category_id || blog.category_id;
+// Update fields
+if (name && name !== blog.name) {
+  blog.name = name;
+  blog.url = createCleanUrl(name); // slug update
+}    blog.category_id = category_id || blog.category_id;
     blog.category_name = category_name || blog.category_name;
     blog.date = date || blog.date;
     blog.author_name = author_name || blog.author_name;
@@ -282,5 +308,5 @@ module.exports = {
   getdatablog,
   deleteblog,
   getblogByid,
- 
+ updateFeaturedblog
 };
