@@ -234,7 +234,6 @@ const getBlogs = async (req, res) => {
     });
   }
 };
-
 const getBlogDetails = async (req, res) => {
   try {
     const blog = await Blog.findOne({
@@ -242,9 +241,24 @@ const getBlogDetails = async (req, res) => {
       status: 1,
     }).populate("category_id", "name url");
 
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+
+const relatedBlogs = await Blog.find({
+  status: 1,
+  _id: { $ne: blog._id }, // current blog exclude
+})
+.populate("category_id", "name url")
+.sort({ createdAt: -1 })
+.limit(3);
     return res.status(200).json({
       success: true,
       data: blog,
+      relatedBlogs,
     });
   } catch (error) {
     return res.status(500).json({
@@ -253,7 +267,6 @@ const getBlogDetails = async (req, res) => {
     });
   }
 };
-
 
 const getBlogCategories = async (req, res) => {
   try {
