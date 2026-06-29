@@ -48,6 +48,7 @@ const createUpload = (folderName, options = {}) => {
       },
   });
 };
+const teamUpload = createUpload("Teams");
 
 const blogUpload = createUpload("blogs");
 const professionUpload = createUpload("professions");
@@ -123,6 +124,7 @@ module.exports = {
   professionUpload,
     celebrityUpload,
   blogUpload,
+  teamUpload,
   uploadToCloudinary, // <-- ye add karo
 
 };

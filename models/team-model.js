@@ -1,9 +1,11 @@
 // models/client-model.js
 const { Schema, model } = require("mongoose");
 
-const clientSchema = new Schema({
+const teamSchema = new Schema({
   name: { type: String, required: true },
   url: { type: String },
+    designation: { type: String },
+
   status: { type: String },
   createdAt: { type: String },
       createdBy :{ type: String},
@@ -12,4 +14,4 @@ const clientSchema = new Schema({
 
 });
 
-module.exports = model('client', clientSchema); // ✅ default export
+module.exports = model('team', teamSchema); // ✅ default export

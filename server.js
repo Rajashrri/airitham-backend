@@ -14,7 +14,7 @@ const authRoute = require("./router/auth-router");
 const blogcategoryRoute = require("./router/blogcategory-router");
 const profileRoute = require("./router/profile-router");
 const testimonialsRoute = require("./router/testimonials-router");
-const clientRoute = require("./router/client-router");
+const teamRoute = require("./router/team-router");
 const blogRoute = require("./router/blog-router");
 const dashboardRoute = require("./router/dashboard-router");
 
@@ -67,7 +67,7 @@ app.use(express.json());
 
 app.use('/blog', express.static(path.join(__dirname, 'public/blog')));
 app.use('/profile', express.static(path.join(__dirname, 'public/profile')));
-app.use('/client', express.static(path.join(__dirname, 'public/client')));
+app.use('/team', express.static(path.join(__dirname, 'public/team')));
 app.use('/testimonial', express.static(path.join(__dirname, 'public/testimonial')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -76,7 +76,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/blogcategory", blogcategoryRoute);
 app.use("/api/profile", profileRoute);
 app.use("/api/testimonial", testimonialsRoute);
-app.use("/api/client", clientRoute);
+app.use("/api/team", teamRoute);
 app.use("/api/blog",blogRoute);
 app.use("/api/dashboard",dashboardRoute);
 
