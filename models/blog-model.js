@@ -25,13 +25,11 @@ const blogSchema = new Schema(
 
     meta_title: {
       type: String,
-      required: true,
       trim: true,
     },
 
     meta_description: {
       type: String,
-      required: true,
     },
 
     meta_keywords: {
