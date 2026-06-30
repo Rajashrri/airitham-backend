@@ -3,7 +3,7 @@ const { Blog } = require("../models/blog-model");
 const Contact = require("../models/contact-model");
 const sendMail = require("../utils/sendMail");
 const Career = require("../models/Career");
-
+const Team = require("../models/team-model");
 const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const uploadResume = async (filePath) => {
@@ -290,12 +290,31 @@ const getBlogCategories = async (req, res) => {
 
 
 
+const getTeamMembers = async (req, res) => {
+  try {
+    const members = await Team.find({
+      status: "1",
+    }).sort({ _id: -1 });
 
+    return res.status(200).json({
+      success: true,
+      data: members,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
 module.exports = {
   getBlogs,
   getBlogDetails,
   getBlogCategories,
   addContact,
   addCareer,
-  getFeaturedBlogs
+  getFeaturedBlogs,
+  getTeamMembers
 };

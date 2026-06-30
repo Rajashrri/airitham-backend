@@ -8,7 +8,8 @@ const {
   getBlogDetails,
   getBlogCategories,
   addContact,
-  addCareer,getFeaturedBlogs
+  addCareer,getFeaturedBlogs,
+  getTeamMembers
 } = require("../controllers/front-controller");
 
 const resumeUpload = require("../utils/resumeUpload");
@@ -23,4 +24,6 @@ router.get("/blog/:slug", getBlogDetails);
 router.get("/blog-categories", getBlogCategories);
 router.post("/add-contact", addContact);
 router.get("/featured-blogs", getFeaturedBlogs);
+router.get("/team-members", getTeamMembers);
+
 module.exports = router;
