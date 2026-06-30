@@ -23,6 +23,27 @@ const blogSchema = new Schema(
         status: { type: Number, default: 1 }, // ✅ active by default
                 featured: { type: Number, default: 0 }, // ✅ active by default
 
+    meta_title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    meta_description: {
+      type: String,
+      required: true,
+    },
+
+    meta_keywords: {
+      type: String,
+      default: "",
+    },
+
+    schema: {
+      type: String,
+      default: "",
+    },
+
  createdAt: { type: String },
    url: { type: String },
   },

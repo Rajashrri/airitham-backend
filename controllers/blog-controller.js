@@ -297,6 +297,87 @@ const getblogByid = async (req, res) => {
 };
 
 
+const getSeoById = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if (!blog) {
+      return res.json({
+        success: false,
+        msg: "Blog not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      msg: blog,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      msg: "Server Error",
+    });
+
+  }
+};
+
+const updateSeo = async (req, res) => {
+
+  try {
+
+    const { id } = req.params;
+
+    const {
+      url,
+      meta_title,
+      meta_description,
+      meta_keywords,
+      schema,
+      updatedBy,
+    } = req.body;
+
+    const blog = await Blog.findById(id);
+
+    if (!blog) {
+
+      return res.json({
+        success: false,
+        msg: "Blog not found",
+      });
+
+    }
+
+    blog.url = url;
+    blog.meta_title = meta_title;
+    blog.meta_description = meta_description;
+    blog.meta_keywords = meta_keywords;
+    blog.schema = schema;
+    blog.updatedBy = updatedBy;
+
+    await blog.save();
+
+    return res.json({
+      success: true,
+      msg: "SEO Updated Successfully",
+      data: blog,
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      success: false,
+      msg: "Server Error",
+    });
+
+  }
+
+};
 
 
 module.exports = {
@@ -308,5 +389,7 @@ module.exports = {
   getdatablog,
   deleteblog,
   getblogByid,
- updateFeaturedblog
+ updateFeaturedblog,
+  getSeoById,
+  updateSeo,
 };

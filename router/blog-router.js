@@ -33,5 +33,8 @@ router.patch("/update-statusblog", Blog.updateStatusblog);
 router.delete("/deleteblog/:id", Blog.deleteblog);
 router.get("/getblogByid/:id", Blog.getblogByid);
 router.patch("/update-featuredblog", Blog.updateFeaturedblog);
+router.patch("/update-seo/:id", Blog.updateSeo);
+router.get("/getSeoById/:id", Blog.getSeoById);
+
 
 module.exports = router;
